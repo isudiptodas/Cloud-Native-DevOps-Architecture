@@ -1,0 +1,79 @@
+import { useState } from "react"
+import { Link, Navigate } from "react-router-dom"
+import { FaEye } from "react-icons/fa";
+import { FaEyeSlash } from "react-icons/fa6";
+import { toast } from "sonner";
+import axios from "axios";
+
+function Login() {
+
+    const [passwordVisible, setPasswordVisible] = useState(false);
+    const [loading, setLoading] = useState(false);
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+
+    const login = async () => {
+        if (!email || !password) {
+            toast.error("All fields required");
+            return;
+        }
+
+        if (!email.includes('@gmail.com') || !email.includes('@outlook.com')) {
+            toast.error("Enter a valid personal email");
+            return;
+        }
+
+        setLoading(true);
+
+        try {
+            const res = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/register`, {
+                 email: email.trim(), password: password.trim()
+            });
+
+            console.log(res);
+            if(res.status === 200){
+                <Navigate to='/user/home' />
+            }
+        } catch (err: any) {
+            if (err && err.response.data.message) {
+                toast.error(err.response.data.message);
+            }
+            else {
+                toast.error("Something went wrong");
+            }
+        }
+    }
+
+    return (
+        <>
+            <div className={`w-full h-screen flex flex-col justify-start items-center relative bg-linear-to-b from-zinc-800 to-zinc-950 overflow-hidden overflow-y-auto hide-scrollbar`}>
+
+                <h1 className={`w-full mt-5 z-20 text-center px-5 text-5xl md:text-7xl pt-5 lg:pt-0 pb-3 font-bold bg-linear-to-b from-white via-gray-400 to-gray-700 bg-clip-text text-transparent`}>Login</h1>
+                <p className={`w-full md:w-[70%] z-20 text-center text-white text-sm md:text-lg px-5`}>Manage what users can know about your website</p>
+
+                <div className={`w-125 h-125 bg-linear-to-br from-gray-500 to-black rounded-full opacity-30 absolute -left-1/2 -bottom-[20%] z-10`} />
+                <div className={`w-125 h-125 bg-linear-to-br from-gray-600 to-black rounded-full opacity-15 absolute -right-1/2 -bottom-[20%] z-10`} />
+
+                <div className={`w-[90%] z-20 py-4 px-3 h-auto md:w-[60%] lg:w-[40%] flex flex-col justify-start items-center border border-zinc-600 mt-10`}>
+                  
+                    <p className={`w-full text-start text-white text-lg font-light`}>Enter email</p>
+                    <input onChange={(e) => setEmail(e.target.value)} type="text" className={`w-full bg-white text-black py-2 px-3 mt-2 outline-none mb-3`} placeholder="doejohn@mail.com" />
+
+                    <div className={`w-full relative flex flex-col justify-start items-center`}>
+                        <p className={`w-full text-start text-white text-lg font-light`}>Enter password</p>
+                        <input onChange={(e) => setPassword(e.target.value)} type={passwordVisible ? "text" : "password"} className={`w-full bg-white text-black py-2 px-3 mt-2 outline-none mb-3`} placeholder="**********" />
+                        <span onClick={() => setPasswordVisible(!passwordVisible)} className={`w-auto absolute top-[55%] text-gray-400 right-4 cursor-pointer`}>{passwordVisible ? <FaEye /> : <FaEyeSlash />}</span>
+                    </div>
+
+                    <p onClick={login} className={`w-full mt-3 bg-white text-black text-center py-2 active:opacity-85 duration-150 ease-in-out cursor-pointer flex justify-center items-center gap-2`}>Login <span className={`loading loading-spinner loading-sm ${loading ? "block" : "hidden"}`}></span></p>
+                </div>
+
+                 <p className={`text-white font-light mt-7 w-full text-sm text-center`}>Don't have an account ?</p>
+                <Link to='/auth/register' className={`text-white font-semibold text-lg pb-2 border-b cursor-pointer w-auto px-3 text-center`}>Create one here</Link>
+
+            </div>
+        </>
+    )
+}
+
+export default Login
