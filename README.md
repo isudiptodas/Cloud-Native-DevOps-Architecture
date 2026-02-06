@@ -8,4 +8,5 @@
   <li>Kubernetes container orchestration</li>
   <li>Load balancing using AWS ELB</li>
   <li>Cloud hosted microservice style backend</li>
+  <li>Application monitoring with prometheus and grafana</li>
 </ul>
