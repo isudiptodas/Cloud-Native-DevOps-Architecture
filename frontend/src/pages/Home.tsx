@@ -12,9 +12,17 @@ type Voting = {
   voterEmail: string[],
   optionNumber: number;
   userEmail?: string;
+  expiry?: string;
   options: { text: string, votes: number }[];
   dateCreated?: Date;
 };
+
+// type TimeLeft = {
+//   days: number;
+//   hours: number;
+//   minutes: number;
+//   seconds: number;
+// };
 
 type User = {
   _id?: string,
@@ -31,6 +39,7 @@ function Home() {
   const [votingPopupVisible, setVotingPopupVisible] = useState(false);
   const [submittingVote, setSubmittingVote] = useState(false);
   const [selectedAnswer, setSelectedAnswer] = useState('');
+  const [now, setNow] = useState<Date>(new Date())
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -94,6 +103,30 @@ function Home() {
     }
   }
 
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setNow(new Date());
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, []);
+
+  const timeLeft = (expiry: string) => {
+    const end = new Date(`${expiry}T23:59:59`);
+    const left = end.getTime() - now.getTime();
+
+    if (left <= 0) return null;
+
+    return {
+      days: Math.floor(left / (1000 * 60 * 60 * 24)),
+      hours: Math.floor((left / (1000 * 60 * 60)) % 24),
+      minutes: Math.floor((left / (1000 * 60)) % 60),
+      seconds: Math.floor((left / 1000) % 60)
+    };
+  }
+
+  const pad = (n: number) => String(n).padStart(2, "0");
+
   return (
     <>
       <div className={`w-full min-h-screen bg-linear-to-b from-zinc-800 to-zinc-950 flex flex-col justify-start items-center relative overflow-y-auto hide-scrollbar`}>
@@ -117,9 +150,20 @@ function Home() {
 
         <div className={`w-full z-30 px-4 py-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 justify-items-center gap-5`}>
           {votingData && votingData.map((item, index) => {
+            const left = timeLeft(item.expiry as string);
             return <div key={index} className={`w-full cursor-pointer group flex flex-col justify-start items-start backdrop-blur-md bg-black/30 px-3 py-3`}>
               <p className={`w-auto text-[8px] capitalize px-4 py-1 rounded-full bg-zinc-900`}>{item.category}</p>
               <p className={`w-auto text-sm font-semibold capitalize px-2 py-5`}>{item.title}</p>
+              <p className={`w-full text-start text-[12px] px-3 font-mono pb-3 text-green-400`}>{left ? (
+                <span>
+                  {left.days}d{" "}
+                  {pad(left.hours)}:
+                  {pad(left.minutes)}:
+                  {pad(left.seconds)}
+                </span>
+              ) : (
+                <span className={`w-full text-start text-[12px] px-3 font-mono pb-3 text-red-500`}>Expired</span>
+              )}</p>
               <div className={`w-full ${item.voterEmail.includes(userData?.email as string) ? "hidden" : "block"} flex justify-between items-center py-2 px-3`}>
                 <div className={`w-[10%] group-hover:w-[30%] duration-300 ease-in-out flex justify-center items-center`}> <span className={`w-full h-px bg-white`}></span> <span><IoIosArrowForward /></span></div>
                 <p onClick={() => { setCurrentData(item); setVotingPopupVisible(true) }} className={`w-auto  px-6 cursor-pointer active:opacity-80 duration-200 ease-in-out py-1 rounded-full bg-white text-black text-[12px]`}>Vote</p>

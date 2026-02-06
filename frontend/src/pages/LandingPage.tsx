@@ -9,6 +9,7 @@ type Voting = {
   source: string;
   optionNumber: number;
   userEmail?: string;
+  expiry?: string;
   option: {text: string, votes: number}[];
   dateCreated?: Date;
 };
