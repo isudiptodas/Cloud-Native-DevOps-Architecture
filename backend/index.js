@@ -5,7 +5,7 @@ import cookieParser from 'cookie-parser';
 import userAuth from './routes/auth.js';
 import voting from './routes/voting.js';
 
-const app = express();
+export const app = express();
 
 app.use(express.json());
 app.use(cookieParser());
