@@ -10,3 +10,11 @@
   <li>Cloud hosted microservice style backend</li>
   <li>Application monitoring with prometheus and grafana</li>
 </ul>
+
+<br/>
+
+<h4>User Flow</h4>
+<img height='450' src='https://github.com/isudiptodas/Cloud-Voting-System/blob/main/user-flow.jpg' />
+
+<h4>User Flow</h4>
+<img height='500' src='https://github.com/isudiptodas/Cloud-Voting-System/blob/main/internal-working.jpg' />
