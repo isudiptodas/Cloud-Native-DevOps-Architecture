@@ -63,6 +63,9 @@ router.put('/api/cast-vote', authenticate, async (req, res) => {
             });
         }
 
+        const found = await Voting.find();
+        await redisConnect.set('allVoting', JSON.stringify(found));
+
         return res.status(200).json({
             success: true,
             message: "Voting successfull",
@@ -77,5 +80,6 @@ router.put('/api/cast-vote', authenticate, async (req, res) => {
         });
     }
 });
+
 
 export default router;
