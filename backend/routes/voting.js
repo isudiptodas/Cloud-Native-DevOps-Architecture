@@ -63,13 +63,13 @@ router.put('/api/cast-vote', authenticate, async (req, res) => {
             });
         }
 
-        const found = await Voting.find();
-        await redisConnect.set('allVoting', JSON.stringify(found));
+        const campaigns = await Voting.find();
+        await redisConnect.set('allVoting', JSON.stringify(campaigns));
 
         return res.status(200).json({
             success: true,
             message: "Voting successfull",
-            data: found
+            data: campaigns
         });
 
     } catch (err) {
@@ -83,3 +83,4 @@ router.put('/api/cast-vote', authenticate, async (req, res) => {
 
 
 export default router;
+
