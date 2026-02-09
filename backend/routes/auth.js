@@ -4,10 +4,11 @@ import { User } from '../models/User.js';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
 import { authenticate } from '../middleware/authenticate.js';
+import { rateLimit } from '../middleware/rateLimit.js';
 
 const router = express.Router();
 
-router.post('/api/register', async (req, res) => {
+router.post('/api/register', rateLimit, async (req, res) => {
     const { name, email, password } = req.body;
 
     await connectDB();
@@ -46,7 +47,7 @@ router.post('/api/register', async (req, res) => {
     }
 });
 
-router.post('/api/login', async (req, res) => {
+router.post('/api/login', rateLimit, async (req, res) => {
     const { email, password } = req.body;
 
     await connectDB();

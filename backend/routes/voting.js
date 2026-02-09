@@ -3,10 +3,11 @@ import { connectDB } from '../config/connectDB.js'
 import { Voting } from '../models/VotingModel.js'
 import { redisConnect } from '../config/redisConnect.js';
 import { authenticate } from '../middleware/authenticate.js';
+import { rateLimit } from '../middleware/rateLimit.js';
 
 const router = express.Router();
 
-router.get('/api/get-voting-list', async (req, res) => {
+router.get('/api/get-voting-list', rateLimit, async (req, res) => {
     await connectDB();
 
     try {
@@ -39,7 +40,7 @@ router.get('/api/get-voting-list', async (req, res) => {
     }
 });
 
-router.put('/api/cast-vote', authenticate, async (req, res) => {
+router.put('/api/cast-vote', rateLimit, authenticate, async (req, res) => {
     await connectDB();
 
     const { campaignID, answer } = req.body;
