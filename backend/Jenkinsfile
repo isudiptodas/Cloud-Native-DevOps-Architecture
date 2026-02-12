@@ -5,8 +5,9 @@ pipeline {
     environment {
         MONGO_TEST = credentials('MONGODB_TEST_URL')
         REDIS = credentials('REDIS_URL')
-        DOCKER_USER = credentials('DOCKER_USERNAME')
-        IMAGE_NAME = "${DOCKER_USER}/cloudvault-backend:${BUILD_NUMBER}"
+        DOCKER_USERNAME = credentials('DOCKER_USERNAME')
+        IMAGE_NAME = "${DOCKER_USERNAME}/cloudvault-backend:${BUILD_NUMBER}"
+        USER_EMAIL = credentials('ALERT_EMAIL')
     }
     
     stages {
@@ -65,6 +66,22 @@ pipeline {
     }
 
     post {
+        success {
+            mail to: $USER_EMAIL,
+            subject: "SUCCESS ! Pipeline executed",
+            body: "Cloudvault backend pipeline executed successfully."
+        }
         
+        failure {
+            mail to: $USER_EMAIL,
+            subject: "ERROR ! Pipeline stopped",
+            body: "Cloudvault backend pipeline stopped due to error. View logs for problem identification."
+        }
+
+        always {
+            echo 'Pipeline execution completed'
+        }
     }
 }
+
+
