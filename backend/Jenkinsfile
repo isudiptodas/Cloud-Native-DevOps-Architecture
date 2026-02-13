@@ -27,7 +27,8 @@ pipeline {
             steps {
                 dir('backend') {
                     sh '''
-                    export NODE_ENV=test 
+                    export NODE_ENV=test
+                    export JWT_SECRET=tempJwtSecret@
                     npm test
                     '''
                     echo 'Test successful'
@@ -88,6 +89,7 @@ pipeline {
         }
     }
 }
+
 
 
 
