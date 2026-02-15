@@ -1,7 +1,7 @@
 <h1>Cloud Native DevOps Architecture</h1>
 <p><b>Tech Stack : </b> <i>ReactJS, NodeJS, ExpressJS, MongoDB, Redis, Docker, Kubernetes, Jenkins, AWS ELB, Prometheus, Grafana</i></p>
 
-<h4>Architecture :</h4>
+<h2>Architecture :</h2>
 <ul>
   <li>Decoupled Frontend</li>
   <li>CI/CD with jenkins</li>
@@ -35,3 +35,66 @@
   <li>All operations, health monitored and logged with prometheus & grafana</li>
   <li>Life cycle continues</li>
 </ul>
+
+###
+
+<h2>Production setup</h2>
+<p><b>Requirements : AWS account, Docker Hub account</b></p>
+
+***
+
+<h2><b>STEP 1 : Jenkins nodes configure</b></h2>
+<ol>
+  <li>Create two EC2 instances (master, agent)</li>
+  <li>On master : </li>
+  <ul>
+    <li>Install jdk latest</li>
+    <li>Install jenkins</li>
+    <li>Attach elastic IP (optional but recommended)</li>
+    <li>Add inbound rule for port : 8080</li>
+    <li>Copy IPv4 and open in new tab with :8080 -> http://ipv4-address:8080</li>
+    <li>Create jenkins account</li>
+    <li>Connect EC2 with local machine or use AWS terminal : </li>
+    <ul>
+      <li>navigate to <i>.ssh</i> folder </li>
+      <li>run command : <i>ssh-keygen</i></li>
+      <li>Store private key on safe place</li>
+      <li>Copy public key (will use later)</li>
+    </ul>
+  </ul>
+
+  <li>On agent : </li>
+  <ul>
+    <li>Install jdk latest</li>
+    <li>Install docker, nodejs, npm, kubectl, aws cli</li>
+    <li>Navigate to <i>.ssh</i> folder > <i>authorized_keys</i> </li>
+    <li>Paste master public key on authorized_keys</li>
+    <li>Save and exit</li>
+  </ul>
+</ol>
+
+<h2><b>STEP 2 : Connect agent node with jenkins master</b></h2>
+<ol>
+  <li>Copy agent node username (ubuntu)</li>
+  <li>Copy private IP (if master and agent are within same VPC) otherwise allocate elastic IP for agent and copy IPv4</li>
+  <li>In jenkins dashboard :</li>
+  <ul>
+    <li>Settings > credentials > add global credentials > type : ssh with username & private key</li>
+    <li>Add username : ubuntu</li>
+    <li>Add host : private IP</li>
+    <li>Add secret/private key : master private key</li>
+    <li>Save and exit</li>
+  </ul>
+  <li>Again on settings : </li>
+  <ul>
+    <li>Manage nodes</li>
+    <li>Add a new agent/node</li>
+    <li>Enter basic details</li>
+    <li>Add authentication method and select from global credentials</li>
+    <li>Save and exit</li>
+  </ul>
+  <li>Ready for jobs and pipeline 🎉</li>
+</ol>
+
+
+
