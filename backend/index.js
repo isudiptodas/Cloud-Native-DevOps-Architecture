@@ -22,15 +22,17 @@ initConnection();
 
 app.use(express.json());
 app.use(cookieParser());
-app.use(cors({
-    origin: [
-        process.env.FRONTEND_PRODUCTION_URL,
-        process.env.FRONTEND_DEVELOPMENT_URL,
-        'http://localhost:5173'
-    ],
-    methods: ['GET', 'POST', 'PUT'],
-    credentials: true,
-}));
+// app.use(cors({
+//     origin: [
+//         process.env.FRONTEND_PRODUCTION_URL,
+//         process.env.FRONTEND_DEVELOPMENT_URL,
+//         'http://localhost:5173'
+//     ],
+//     methods: ['GET', 'POST', 'PUT'],
+//     credentials: true,
+// }));
+
+app.use(cors());
 
 app.use(voting);
 app.use(userAuth);
@@ -42,5 +44,6 @@ if (process.env.NODE_ENV !== "test") {
         console.log('Server started');
     })
 }
+
 
 export default app;
