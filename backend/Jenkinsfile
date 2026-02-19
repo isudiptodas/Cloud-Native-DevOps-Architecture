@@ -69,11 +69,11 @@ pipeline {
                 }
             }
         }
-        /*
+        
         stage('Update EKS deployment'){
             sh 'kubectl set image deployment/cloudvault-backend cloudvault=$IMAGE_NAME'
         }
-        */
+        
     }
 
     post {
@@ -94,6 +94,7 @@ pipeline {
         }
     }
 }
+
 
 
 
