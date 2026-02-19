@@ -67,6 +67,7 @@
   <ul>
     <li>Install jdk latest</li>
     <li>Install docker, nodejs, npm, kubectl, aws cli</li>
+    <li>Create a role for EC2 to communicate with EKS and attach the policy with agent EC2</li>
     <li>Navigate to <i>.ssh</i> folder > <i>authorized_keys</i> </li>
     <li>Paste master public key on authorized_keys</li>
     <li>Save and exit</li>
@@ -118,20 +119,33 @@
   <li>Pipeline connected 🎉</li>
 </ol>
 
-<h2><b>STEP 5 : AWS EKS Deployment</b></h2>
+<h2><b>STEP 5 : AWS EKS Setup with nodegroups</b></h2>
 <ol>
-  <li>Create cluster in aws console with VPC settings and subnets (recommended : 1 public subnet, 2 private subnet)</li>
-  <li>Create one fargate profile</li>
+  <li>Create cluster in aws console with VPC settings and subnets (recommended : 3 subnets)</li>
+  <li>Attach a role for EKS with EKSClusterPolicy </li>
+  <li>Create one nodegroup with all the selected subnets</li>
+  <li>Specs : atleast t3.small / t3.medium with 20GB storage and 1 node max. (for small deployments)</li>
+  <li>Attach roles and policy to nodegroup : </li>
+  <ul>
+    <li>IAM > roles > select EC2</li>
+    <li>Attach policy EC2WorkerNode, ContainerRegistry, CNI</li>
+    <li>Save and exit</li>
+  </ul>
+  <li>Attach this role to the nodegroup</li>
+
+  </ol>
+  
+  <h2><b>STEP 6 : Authenticate EC2 jenkins agent with EKS</b></h2>
+  <ol>
   <li>On jenkins agent EC2 : </li>
   <ul>
-    <li>Add IAM role policy for EKS access permission</li>
-    <li>run aws command for kubeconfig file generate with cluster name and region</li>
-    <li>Create yml files for deployment, service, secrets</li>
-    <li>Apply yml to create deployments in cluster</li>
-    <li>Copy public DNS name (external IP)</li>
-    <li>Backend running 🎉</li>
+    <li>Select IAM role and find ARN</li>
+    <li>Copy ARN > navigate to EKS > cluster > select cluster > access</li>
+    <li>Create a new principle access role and add the ARN</li>
+    <li>Add policy of EKSClusterAdminPolicy</li>
+    <li>Save and exit</li>
   </ul>
-  <li>Create auto deployment rollout with jenkins pipeline</li>
-</ol>
-
-
+  <li>Now jenkins EC2 can make access to EKS cluster and run commands</li>
+  <li>Create auto image update rollout in jenkins pipeline</li>
+<li>Done 🎉</li>
+  </ol>
