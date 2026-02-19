@@ -1,5 +1,5 @@
 pipeline {
-    
+      
     agent { label 'worker_agent' }
     
     environment {
@@ -97,6 +97,7 @@ pipeline {
         }
     }
 }
+
 
 
 
