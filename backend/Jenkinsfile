@@ -92,7 +92,13 @@ pipeline {
         failure {
 
             script {
-            def reason = currentBuild.rawBuild.getLog(10).join('\n')
+            def reason = "Failure reason unavailable. Please check logs."
+
+            try {
+                reason = currentBuild.rawBuild.getLog(10).join('\n')
+            } catch (e) {
+                
+            }
             
             mail to: env.USER_EMAIL,
             subject: "ERROR ! Pipeline #${BUILD_NUMBER} stopped",
@@ -115,6 +121,7 @@ pipeline {
         }
     }
 }
+
 
 
 
