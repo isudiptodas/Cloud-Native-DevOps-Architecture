@@ -19,7 +19,7 @@ async function initConnection() {
 }
 
 initConnection();
-
+ 
 app.use(express.json());
 app.use(cookieParser());
 // app.use(cors({
@@ -54,5 +54,6 @@ if (process.env.NODE_ENV !== "test") {
 
 
 export default app;
+
 
 
