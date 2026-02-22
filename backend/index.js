@@ -47,13 +47,14 @@ app.use(userAuth);
 const port = process.env.PORT || 5000;
 
 if (process.env.NODE_ENV !== "test") {
-    app.listen(port, () => {
+    app.listen(port, "0.0.0.0", () => {
         console.log('Server started');
     })
 }
 
 
 export default app;
+
 
 
 
