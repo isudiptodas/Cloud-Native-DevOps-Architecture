@@ -85,14 +85,29 @@ pipeline {
     post {
         success {
             mail to: env.USER_EMAIL,
-            subject: "SUCCESS ! Pipeline executed",
+            subject: "SUCCESS ! Pipeline #${BUILD_NUMBER} executed",
             body: "Cloudvault backend pipeline executed successfully."
         }
         
         failure {
+
+            script {
+            def reason = currentBuild.rawBuild.getLog(10).join('\n')
+            
             mail to: env.USER_EMAIL,
-            subject: "ERROR ! Pipeline stopped",
-            body: "Cloudvault backend pipeline stopped due to error. View logs for problem identification."
+            subject: "ERROR ! Pipeline #${BUILD_NUMBER} stopped",
+            body: """
+                   Cloudvault backend pipeline stopped due to error.
+                   Build Number : ${BUILD_NUMBER}
+                   Failed Stage : ${STAGE_NAME}
+
+                   Failure Reason (last log lines):
+                   ${reason}
+
+                   View full logs here:
+                   ${BUILD_URL}
+                 """
+            }
         }
 
         always {
@@ -100,6 +115,7 @@ pipeline {
         }
     }
 }
+
 
 
 
