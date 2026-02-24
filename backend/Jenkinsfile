@@ -86,7 +86,13 @@ pipeline {
         success {
             mail to: env.USER_EMAIL,
             subject: "SUCCESS ! Pipeline #${BUILD_NUMBER} executed",
-            body: "Cloudvault backend pipeline executed successfully."
+            body: """
+                Cloudvault backend pipeline executed successfully.
+
+                Build Number : ${BUILD_NUMBER}
+                View full logs here:
+                ${BUILD_URL}
+                """
         }
         
         failure {
@@ -121,4 +127,5 @@ pipeline {
         }
     }
 }
+
 
