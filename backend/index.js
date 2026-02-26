@@ -1,6 +1,7 @@
 import 'dotenv/config';
 import express from 'express';
 import cors from 'cors';
+import client from 'prom-client';
 import cookieParser from 'cookie-parser';
 import userAuth from './routes/auth.js';
 import voting from './routes/voting.js';
@@ -41,6 +42,14 @@ app.get('/', (req, res) => {
     })
 });
 
+const register = new client.Registry();
+client.collectDefaultMetrics({ register });
+
+app.get('/metrics', async (req, res) => {
+    res.set('Content-Type', register.contentType);
+    res.end(await register.metrics());
+});
+
 app.use(voting);
 app.use(userAuth);
 
@@ -54,8 +63,6 @@ if (process.env.NODE_ENV !== "test") {
 
 
 export default app;
-
-
 
 
 
