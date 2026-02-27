@@ -10,10 +10,12 @@
     <li>Secure env with jenkins credential manager</li>
     <li>Conditional dependency installation (storage cache)</li>
     <li>Image scan for vulnerabilities and issues</li>
+    <li>EKS image update rollout confirmation</li>
+    <li>Email alert post pipeline execution</li>
   </ul>
   <li>Kubernetes container orchestration with AWS EKS</li>
   <li>Load balancing using AWS ELB</li>
-  <li>Application monitoring with prometheus and grafana</li>
+  <li>Application and cluster monitoring with prometheus and grafana</li>
 </ol>
 
 <br/>
