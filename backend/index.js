@@ -38,7 +38,14 @@ app.use(cors());
 app.get('/', (req, res) => {
     res.status(200).json({
         success: true,
-        message: "Backend running... on new version 19"
+        message: "Backend running..."
+    })
+});
+
+app.get('/hello', (req, res) => {
+    res.status(200).json({
+        success: true,
+        message: "Welcome to hello route"
     })
 });
 
