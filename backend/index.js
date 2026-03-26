@@ -42,13 +42,6 @@ app.get('/', (req, res) => {
     })
 });
 
-app.get('/hello', (req, res) => {
-    res.status(200).json({
-        success: true,
-        message: "Welcome to hello route"
-    })
-});
-
 const register = new client.Registry();
 client.collectDefaultMetrics({ register });
 
