@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: cloudvault-metrics-service
+  labels:
+    app: cloudvault
+spec:
+  type: ClusterIP
+  selector:
+    app: cloudvault
+  ports:
+    - name: metrics  
+      port: 7000
+      targetPort: 7000
