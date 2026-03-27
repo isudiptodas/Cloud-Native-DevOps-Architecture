@@ -19,6 +19,7 @@ spec:
           image: isudiptodas/cloudvault-backend:11
           ports:
             - containerPort: 5000
+            - containerPort: 7000
           envFrom:
             - secretRef:
                 name: cloudvault-secret
